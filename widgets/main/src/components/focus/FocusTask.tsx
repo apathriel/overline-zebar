@@ -11,8 +11,9 @@ interface TogglEntry {
   startedAt: number; // ms since epoch
 }
 
-async function fetchTogglCurrent(email: string, apiKey: string): Promise<TogglEntry | null> {
-  const creds = btoa(`${email}:${apiKey}`);
+async function fetchTogglCurrent(apiKey: string): Promise<TogglEntry | null> {
+  // Toggl API token auth: base64(token:api_token)
+  const creds = btoa(`${apiKey}:api_token`);
   // Use shellExec to bypass WebView2 CORS restrictions — runs via Rust backend
   const result = await shellExec('powershell', [
     '-NoProfile', '-NonInteractive', '-Command',
@@ -49,8 +50,7 @@ export function FocusTask() {
   const [togglEntry, setTogglEntry] = useState<TogglEntry | null>(null);
   const [togglElapsed, setTogglElapsed] = useState(0);
 
-  // Toggl credentials from config (synced across widgets via Tauri IPC)
-  const [togglEmail] = useWidgetSetting('main', 'togglEmail');
+  // Toggl API token from config (synced across widgets via Tauri IPC)
   const [togglApiKey] = useWidgetSetting('main', 'togglApiKey');
 
   // UI — only mode remaining is edit-task (right-click)
@@ -60,10 +60,10 @@ export function FocusTask() {
 
   // ── Toggl polling ─────────────────────────────────────────────────
   useEffect(() => {
-    if (!togglEmail || !togglApiKey) return;
+    if (!togglApiKey) return;
 
     const poll = () =>
-      fetchTogglCurrent(togglEmail, togglApiKey)
+      fetchTogglCurrent(togglApiKey)
         .then(setTogglEntry)
         .catch(() => {});
 
@@ -85,7 +85,7 @@ export function FocusTask() {
       clearInterval(id);
       document.removeEventListener('visibilitychange', onVisible);
     };
-  }, [togglEmail, togglApiKey]);
+  }, [togglApiKey]);
 
   // ── Toggl elapsed ticker ──────────────────────────────────────────
   useEffect(() => {
@@ -120,8 +120,8 @@ export function FocusTask() {
 
     if (!hasManualTask) {
       // Nothing tracked locally — use click as a manual Toggl refresh
-      if (togglEmail && togglApiKey) {
-        fetchTogglCurrent(togglEmail, togglApiKey)
+      if (togglApiKey) {
+        fetchTogglCurrent(togglApiKey)
           .then(setTogglEntry)
           .catch(() => {});
       }

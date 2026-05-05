@@ -31,7 +31,6 @@ export const defaultConfig: RootConfig = {
         { id: 'battery-3', min: 60, max: 100, labelColor: '--text' },
       ],
       useInlineStats: false,
-      togglEmail: '',
       togglApiKey: '',
       pinnedSystrayIcons: [],
       weatherUnit: 'celsius',

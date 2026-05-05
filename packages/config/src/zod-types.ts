@@ -56,7 +56,6 @@ export const MainWidgetSettingsSchema = BaseWidgetSettingsSchema.extend({
   systemStatThresholds: z.array(ThresholdSchema).default([]),
   batteryThresholds: z.array(ThresholdSchema).default([]),
   useInlineStats: z.boolean().default(false),
-  togglEmail: z.string().default(''),
   togglApiKey: z.string().default(''),
 });
 
