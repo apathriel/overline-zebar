@@ -111,11 +111,21 @@ export function FocusTask() {
   const isTogglActive = togglEntry !== null;
   const hasManualTask = localTask !== '';
 
-  // Left click: pause/resume manual timer (no-op if Toggl active or no task)
+  // Left click: pause/resume manual timer; if no task, manually refresh Toggl
   const handleClick = () => {
     if (editing) return;
+
+    if (!hasManualTask) {
+      // Nothing tracked locally — use click as a manual Toggl refresh
+      if (togglEmail && togglApiKey) {
+        fetchTogglCurrent(togglEmail, togglApiKey)
+          .then(setTogglEntry)
+          .catch(() => {});
+      }
+      return;
+    }
+
     if (isTogglActive) return;
-    if (!hasManualTask) return;
 
     if (paused) {
       setTimerBase(Date.now());
@@ -195,15 +205,6 @@ export function FocusTask() {
       )}
       onClick={handleClick}
       onContextMenu={handleContextMenu}
-      title={
-        isTogglActive
-          ? 'Toggl timer active — configure credentials in Settings'
-          : hasManualTask
-          ? paused
-            ? 'Click to resume — right-click to edit'
-            : 'Click to pause — right-click to edit'
-          : 'Right-click to set focus task'
-      }
     >
       {!editing && indicator}
 
@@ -221,7 +222,7 @@ export function FocusTask() {
       ) : (
         <>
           <span className={cn('truncate', displayTask ? 'text-text' : 'text-text-muted')}>
-            {displayTask || 'focus...'}
+            {displayTask || 'Focus...'}
           </span>
           {showTimer && (
             <span className="text-text-muted shrink-0 tabular-nums">
