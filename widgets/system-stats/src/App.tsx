@@ -11,7 +11,7 @@ import Performance from './components/performance';
 const providers = zebar.createProviderGroup({
   cpu: { type: 'cpu' },
   memory: { type: 'memory' },
-  weather: { type: 'weather' },
+  weather: { type: 'weather', refreshInterval: 1_800_000 }, // 30 min
   host: { type: 'host' },
   battery: { type: 'battery' },
   disk: { type: 'disk' },
