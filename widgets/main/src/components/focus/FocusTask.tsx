@@ -3,7 +3,7 @@ import { chipStyles } from '@overline-zebar/ui';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '../../utils/cn';
 
-const POLL_INTERVAL_MS = 30_000;
+const POLL_INTERVAL_MS = 120_000; // 30 req/hour limit → 1 per 2 min max
 
 interface TogglEntry {
   description: string | null;
@@ -65,8 +65,23 @@ export function FocusTask() {
         .catch(() => {});
 
     poll();
-    const id = setInterval(poll, POLL_INTERVAL_MS);
-    return () => clearInterval(id);
+    let id = setInterval(poll, POLL_INTERVAL_MS);
+
+    // Re-sync immediately when the machine wakes or the tab becomes visible
+    // (e.g. after sleep), then restart the interval from that point.
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        clearInterval(id);
+        poll();
+        id = setInterval(poll, POLL_INTERVAL_MS);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+
+    return () => {
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
   }, [togglEmail, togglApiKey]);
 
   // ── Toggl elapsed ticker ──────────────────────────────────────────
