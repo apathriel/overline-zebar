@@ -1,5 +1,12 @@
 import { Theme } from '../types';
 
+// Auto theme: no hardcoded colors — defers to CSS media query + color-scheme-fallback.js
+export const autoTheme: Theme = {
+  id: 'auto',
+  name: 'Auto (System)',
+  colors: {},
+};
+
 export const defaultTheme: Theme = {
   id: 'default',
   name: 'Default',

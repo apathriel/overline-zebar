@@ -38,7 +38,13 @@ function loadConfig(forceReload = false): RootConfig {
       }
     });
 
-    // if (parsed.version < CURRENT_VERSION) parsed = migrate(parsed);
+    // Migrate v1 → v2: switch from hardcoded dark 'default' to 'auto' (system) theme
+    if ((parsed.version ?? 1) < 2) {
+      if (parsed.app?.currentThemeId === 'default') {
+        parsed.app.currentThemeId = 'auto';
+      }
+      parsed.version = 2;
+    }
 
     cachedConfig = deepMerge(defaultConfig, parsed);
     logger.log('Successfully merged default config with user config');

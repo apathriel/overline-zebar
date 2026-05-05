@@ -1,8 +1,10 @@
+import { useWidgetSetting } from '@overline-zebar/config';
+import { chipStyles } from '@overline-zebar/ui';
 import { useState } from 'react';
 import { SystrayIcon, SystrayOutput } from 'zebar';
+import { cn } from '../../utils/cn';
 import { ExpandingCarousel } from './components/ExpandingCarousel';
 import { SystrayItem } from './components/SystrayItem';
-import { useWidgetSetting } from '@overline-zebar/config';
 
 type SystrayProps = {
   systray: SystrayOutput | null;
@@ -51,8 +53,8 @@ export default function Systray({ systray }: SystrayProps) {
   );
   const presentPinnedIconsCount = presentPinnedIcons.length;
 
-  // Set a default of 4 visible icons, but expand if there are more pinned icons.
-  const visibleCount = Math.max(4, presentPinnedIconsCount);
+  // Set a default of 8 visible icons, but expand if there are more pinned icons.
+  const visibleCount = Math.max(8, presentPinnedIconsCount);
 
   const arrangedIcons = arrangeIconsWithPinnedCenter(pinnedSystrayIcons, icons);
 
@@ -71,7 +73,7 @@ export default function Systray({ systray }: SystrayProps) {
   ));
 
   return (
-    <div className="flex items-center gap-1.5" onClick={handleClick}>
+    <div className={cn(chipStyles, 'overflow-hidden')} onClick={handleClick}>
       <ExpandingCarousel
         items={systrayIcons}
         expanded={expanded}

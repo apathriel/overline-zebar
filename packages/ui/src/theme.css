@@ -1,23 +1,42 @@
 :root {
   --radius: 0.5rem;
-  --border: #343b47;
-  --background: #1e2228;
-  --background-deeper: #090b0f;
-  --button: #353b45;
-  --button-border: #4e5663;
+  --bg-opacity: 80%;
+  --active-modifier: 75%;
 
-  /* Primary Colors */
-  --primary: #5d7287;
-  --primary-border: #718aa3;
+  /* Dark theme (default) */
+  --border: oklch(.35 .024 261.7);
+  --background: oklch(.25 .013 261.7);
+  --background-deeper: oklch(.15 .008 261.7);
+  --button: oklch(.35 .019 261.7);
+  --button-border: oklch(.45 .024 261.7);
+  --primary: oklch(.542 .041 248.7);
+  --primary-border: oklch(.623 .047 248.7);
   --primary-text: #edeef0;
-
-  /* Text and Icon Colors */
-  --text: #edeef0;
-  --text-muted: #caced4;
-  --icon: #a9aeb8;
-
-  /* Feedback Colors */
+  --text: oklch(.95 .003 261.7);
+  --text-muted: oklch(.85 .009 261.7);
+  --icon: oklch(.75 .015 261.7);
   --success: #a3be8c;
   --danger: #bf616a;
   --warning: #d08770;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --border: oklch(.22 .014 295);
+    --background: oklch(.95 .016 300);
+    --background-deeper: oklch(.95 .012 300);
+    --bg-opacity: 90%;
+    --button: oklch(.92 .014 295);
+    --button-border: oklch(.85 .017 295);
+    --primary: oklch(.92 .029 288);
+    --primary-border: oklch(83.902% 0.0001 288);
+    --primary-text: oklch(.06 .002 295);
+    --text: oklch(.06 .002 295);
+    --text-muted: oklch(.45 .006 295);
+    --icon: oklch(.35 .011 295);
+    --success: #1f7a3a;
+    --danger: #8b1f2b;
+    --warning: #9a531e;
+    --active-modifier: 10%;
+  }
 }

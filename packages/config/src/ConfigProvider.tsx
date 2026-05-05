@@ -44,10 +44,21 @@ export const ConfigProvider: React.FC<{
 
   // Sync theme changes to the document to ALL widgets
   useEffect(() => {
+    const COLOR_VARS = [
+      '--border', '--background', '--background-deeper',
+      '--button', '--button-border', '--primary', '--primary-border',
+      '--primary-text', '--text', '--text-muted', '--icon',
+      '--success', '--danger', '--warning',
+    ];
+
     const theme = state.app.themes.find(
       (t) => t.id === state.app.currentThemeId
     );
-    if (theme) {
+
+    if (!theme || Object.keys(theme.colors).length === 0) {
+      // Auto mode: remove inline overrides so CSS media query + fallback JS control colors
+      COLOR_VARS.forEach((v) => document.documentElement.style.removeProperty(v));
+    } else {
       Object.entries(theme.colors).forEach(([key, value]) => {
         document.documentElement.style.setProperty(key, value);
       });

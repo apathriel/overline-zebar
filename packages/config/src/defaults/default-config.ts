@@ -1,13 +1,13 @@
-import { catppuccinThemes, defaultTheme } from '../defaults/theme-presets';
+import { autoTheme, catppuccinThemes, defaultTheme } from '../defaults/theme-presets';
 import { RootConfig } from '../types';
 
 export const defaultConfig: RootConfig = {
-  version: 1,
+  version: 2,
   app: {
     useAutoTiling: false,
     zebarWebsocketUri: 'ws://localhost:6123',
-    themes: [defaultTheme, ...catppuccinThemes],
-    currentThemeId: 'default',
+    themes: [autoTheme, defaultTheme, ...catppuccinThemes],
+    currentThemeId: 'auto',
     radius: '0.5rem',
   },
   widgets: {
@@ -31,6 +31,8 @@ export const defaultConfig: RootConfig = {
         { id: 'battery-3', min: 60, max: 100, labelColor: '--text' },
       ],
       useInlineStats: false,
+      togglEmail: '',
+      togglApiKey: '',
       pinnedSystrayIcons: [],
       weatherUnit: 'celsius',
       dynamicWorkspaceIndicator: false,

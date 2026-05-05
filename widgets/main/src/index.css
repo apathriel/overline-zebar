@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Always show border on the main bar, regardless of marginX setting */
+#root > div {
+  border: 1px solid color-mix(in srgb, var(--button-border) 80%, transparent);
+  border-radius: 0.25rem;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}

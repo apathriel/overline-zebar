@@ -10,6 +10,7 @@ import GeneralTab from './components/GeneralTab';
 import SystemStatsTab from './components/SystemStatsTab';
 import SystrayTab from './components/SystrayTab';
 import TimeTab from './components/TimeTab';
+import TogglTab from './components/TogglTab';
 
 export function MainSettings() {
   return (
@@ -26,6 +27,7 @@ export function MainSettings() {
             <TabsTrigger value="time">Time</TabsTrigger>
             <TabsTrigger value="system-stats">Stats</TabsTrigger>
             <TabsTrigger value="systray">System Tray</TabsTrigger>
+            <TabsTrigger value="toggl">Toggl</TabsTrigger>
           </TabsList>
           <div className="w-full bg-text/5 h-px my-4 mb-6"></div>
 
@@ -52,6 +54,12 @@ export function MainSettings() {
             className="flex flex-col flex-grow space-y-8 overflow-y-auto min-h-0"
           >
             <SystrayTab />
+          </TabsContent>
+          <TabsContent
+            value="toggl"
+            className="space-y-8 overflow-y-auto min-h-0"
+          >
+            <TogglTab />
           </TabsContent>
         </div>
       </Tabs>

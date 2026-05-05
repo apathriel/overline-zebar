@@ -2,9 +2,9 @@ import { useWidgetSetting } from '@overline-zebar/config';
 import { useEffect, useState } from 'react';
 import * as zebar from 'zebar';
 import { Center } from './components/Center';
+import { FocusTask } from './components/focus/FocusTask';
 import { LeftButtons } from './components/leftButtons';
 import Media from './components/media';
-import RightButtons from './components/rightButtons/RightButtons';
 import StatProviders from './components/statProviders';
 import Systray from './components/systray';
 import { TimeDisplay } from './components/TimeDisplay';
@@ -72,7 +72,10 @@ function App() {
       </div>
 
       {/* Right */}
-      <div className="flex gap-2 items-center h-full z-10">
+      <div className="flex gap-2 items-center h-full z-10" style={{ paddingRight: `${paddingRight}px` }}>
+        <div className="flex items-center h-full">
+          <FocusTask />
+        </div>
         <div className="flex items-center h-full">
           <StatProviders
             weather={output.weather}
@@ -91,12 +94,6 @@ function App() {
           <Systray systray={output.systray} />
         </div>
         <TimeDisplay dateOutput={output.date} />
-        <div
-          className="flex items-center h-full"
-          style={{ paddingRight: `${paddingRight}px` }}
-        >
-          <RightButtons />
-        </div>
       </div>
     </div>
   );
