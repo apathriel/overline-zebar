@@ -22,10 +22,14 @@ async function fetchTogglCurrent(apiKey: string): Promise<TogglEntry | null> {
   const output = result.stdout.trim();
   if (!output || output === 'null') return null;
   const data = JSON.parse(output);
-  if (!data) return null;
+  // Must be an object with a valid start timestamp and no stop time (still running)
+  if (!data || typeof data !== 'object') return null;
+  if (data.stop != null) return null; // timer was stopped
+  const startedAt = new Date(data.start).getTime();
+  if (isNaN(startedAt)) return null;
   return {
     description: data.description || null,
-    startedAt: new Date(data.start).getTime(),
+    startedAt,
   };
 }
 
