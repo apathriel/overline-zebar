@@ -1,6 +1,7 @@
 import { useWidgetSetting } from '@overline-zebar/config';
 import { chipStyles } from '@overline-zebar/ui';
 import { useEffect, useRef, useState } from 'react';
+import { shellExec } from 'zebar';
 import { cn } from '../../utils/cn';
 
 const POLL_INTERVAL_MS = 120_000; // 30 req/hour limit → 1 per 2 min max
@@ -12,12 +13,14 @@ interface TogglEntry {
 
 async function fetchTogglCurrent(email: string, apiKey: string): Promise<TogglEntry | null> {
   const creds = btoa(`${email}:${apiKey}`);
-  const res = await fetch('https://api.track.toggl.com/api/v9/me/time_entries/current', {
-    headers: { Authorization: `Basic ${creds}` },
-  });
-  if (res.status === 404 || res.status === 204) return null;
-  if (!res.ok) throw new Error(`Toggl API ${res.status}`);
-  const data = await res.json();
+  // Use shellExec to bypass WebView2 CORS restrictions — runs via Rust backend
+  const result = await shellExec('powershell', [
+    '-NoProfile', '-NonInteractive', '-Command',
+    `try { $r = Invoke-RestMethod -Uri 'https://api.track.toggl.com/api/v9/me/time_entries/current' -Headers @{Authorization='Basic ${creds}'} -ErrorAction Stop; if ($r) { $r | ConvertTo-Json -Compress } else { 'null' } } catch { 'null' }`,
+  ]);
+  const output = result.stdout.trim();
+  if (!output || output === 'null') return null;
+  const data = JSON.parse(output);
   if (!data) return null;
   return {
     description: data.description || null,
