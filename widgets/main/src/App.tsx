@@ -21,7 +21,7 @@ const providers = zebar.createProviderGroup({
   cpu: { type: 'cpu' },
   date: { type: 'date', formatting: 'EEE d MMM t', locale: 'en-GB' },
   memory: { type: 'memory' },
-  weather: { type: 'weather' },
+  weather: { type: 'weather', refreshInterval: 1_800_000 }, // 30 min
   audio: { type: 'audio' },
   systray: { type: 'systray' },
   battery: { type: 'battery' },

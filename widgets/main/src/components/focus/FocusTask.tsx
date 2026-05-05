@@ -195,7 +195,10 @@ export function FocusTask() {
   ) : paused ? (
     <span className="text-text-muted shrink-0 leading-none text-[10px]">▶</span>
   ) : hasManualTask ? (
-    <span className="h-2 w-2 rounded-full bg-primary shrink-0" />
+    <span className="relative flex h-2 w-2 shrink-0">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ backgroundColor: '#8a5cf5' }} />
+      <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: '#8a5cf5' }} />
+    </span>
   ) : null;
 
   return (
